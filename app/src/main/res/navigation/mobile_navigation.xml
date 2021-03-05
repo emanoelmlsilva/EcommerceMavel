@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.ecommercemarvel.ui.dashboard.DashboardFragment"
+        android:name="com.example.ecommercemarvel.ui.detail.DetailFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_detail" />
 
     <fragment
         android:id="@+id/navigation_notifications"
