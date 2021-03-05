@@ -7,7 +7,7 @@ public class Comic {
     private int id;
     private String title;
     private String description;
-    private List<Imagens> imagens;
+    private Thumbnail thumbnail;
     private List<Prices> prices;
 
     public int getId() {
@@ -34,12 +34,12 @@ public class Comic {
         this.description = description;
     }
 
-    public List<Imagens> getImagens() {
-        return imagens;
+    public Thumbnail getThumbnail() {
+        return thumbnail;
     }
 
-    public void setImagens(List<Imagens> imagens) {
-        this.imagens = imagens;
+    public void setThumbnail(Thumbnail thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public List<Prices> getPrices() {

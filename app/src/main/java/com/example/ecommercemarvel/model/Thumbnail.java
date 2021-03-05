@@ -1,6 +1,6 @@
 package com.example.ecommercemarvel.model;
 
-public class Imagens {
+public class Thumbnail {
 
     private String path;
     private String extension;
