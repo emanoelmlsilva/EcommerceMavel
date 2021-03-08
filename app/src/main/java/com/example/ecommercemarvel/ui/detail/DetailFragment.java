@@ -27,7 +27,7 @@ import java.util.Objects;
 public class DetailFragment extends Fragment {
     private Comic comic;
     private Button btnClose, btnPurchase;
-    private TextView txtTitle, txtDescription;
+    private TextView txtTitle, txtDescription, txtPrice;
     private Spinner spinner;
     private ImageView imgComic, imgRare;
     private ComicDAOImp dataBase;
@@ -57,6 +57,7 @@ public class DetailFragment extends Fragment {
         btnPurchase = view.findViewById(R.id.btnPurchase);
         txtTitle = view.findViewById(R.id.txtTitleDetail);
         txtDescription = view.findViewById(R.id.txtDescription);
+        txtPrice = view.findViewById(R.id.txtPriceDetail);
         spinner = view.findViewById(R.id.spinnerAmount);
         imgComic = view.findViewById(R.id.imgDetail );
         imgRare = view.findViewById(R.id.imgRareDetail);
@@ -66,6 +67,8 @@ public class DetailFragment extends Fragment {
         txtTitle.setText(comic.getTitle());
         String description = comic.getDescription() != null ? comic.getDescription() : "";
         txtDescription.setText("Descrição: "+description);
+        txtPrice.setText("$"+comic.getPrices().get(0).getPrice());
+
         generateValueSpinner(100);
         if(comic.getRare()){
             imgRare.setVisibility(View.VISIBLE);
