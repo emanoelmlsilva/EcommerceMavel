@@ -15,4 +15,5 @@ public interface ComicDAO extends Persistable {
     String getImageUrl();
     Float getPrice();
     int getAmount();
+    Boolean getRare();
 }
