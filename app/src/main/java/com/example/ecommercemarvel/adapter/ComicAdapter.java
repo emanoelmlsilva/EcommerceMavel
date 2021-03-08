@@ -59,6 +59,11 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
         });
     }
 
+    public void updateList(List<Comic> comics){
+        this.comics.addAll(comics);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return this.comics.size();
