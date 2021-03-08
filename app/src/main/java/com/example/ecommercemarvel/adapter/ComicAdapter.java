@@ -53,7 +53,7 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
                 .into(holder.getImgComic());
         holder.getTitle().setText(comic.getTitle());
         holder.getCardView().setOnClickListener(view -> {
-            detailFragment = new DetailFragment(comic);
+            detailFragment = new DetailFragment(comic, view.getContext());
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.add(R.id.container, detailFragment);
             fragmentTransaction.addToBackStack(null);
