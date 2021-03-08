@@ -43,7 +43,9 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Comic comic = this.comics.get(position);
         String url = comic.getThumbnail().getPath() + "." + comic.getThumbnail().getExtension();
-
+        if(comic.getRare()){
+            holder.imgRare.setVisibility(View.VISIBLE);
+        }
         Glide.with(holder.getView())
                 .load(url)
                 .centerCrop()
@@ -73,7 +75,7 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
 
         private CardView cardView;
         private TextView title;
-        private ImageView imgComic;
+        private ImageView imgComic, imgRare;
         private View view;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -82,6 +84,7 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
             cardView = itemView.findViewById(R.id.cardComic);
             title = itemView.findViewById(R.id.txtComic);
             imgComic = itemView.findViewById(R.id.imgComic);
+            imgRare = itemView.findViewById(R.id.imgRare);
             view = itemView;
 
         }
@@ -100,6 +103,10 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
 
         public View getView() {
             return view;
+        }
+
+        public ImageView getImgRare() {
+            return imgRare;
         }
     }
 }

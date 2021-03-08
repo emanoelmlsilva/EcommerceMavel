@@ -9,6 +9,7 @@ public class Comic {
     private String description;
     private Thumbnail thumbnail;
     private List<Prices> prices;
+    private Boolean isRare;
 
     public int getId() {
         return id;
@@ -48,5 +49,13 @@ public class Comic {
 
     public void setPrices(List<Prices> prices) {
         this.prices = prices;
+    }
+
+    public Boolean getRare() {
+        return isRare;
+    }
+
+    public void setRare(Boolean rare) {
+        isRare = rare;
     }
 }

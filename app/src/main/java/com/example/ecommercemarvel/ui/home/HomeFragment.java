@@ -32,13 +32,13 @@ import com.example.ecommercemarvel.service.RetrofitMarvel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.Callable;
 
 public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ComicAdapter comicAdapter;
-    private int limit =     0;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private List<Comic> comics = new ArrayList<>();
     private MarvelService marvelService;
@@ -78,13 +78,13 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    private void getComics(int newLimit){
-        limit += newLimit;
+    private void getComics(int limit){
 
         marvelService.getComics(limit).enqueue(new Callback<ResponseComic>() {
             @Override
             public void onResponse(Call<ResponseComic> call, Response<ResponseComic> response) {
-                loadingComic(response.body().getData().getResults());
+                List<Comic> generatedNewList = generateListWithComicRare(response.body().getData().getResults());
+                loadingComic(generatedNewList);
             }
 
             @Override
@@ -92,6 +92,22 @@ public class HomeFragment extends Fragment {
                 System.out.println("FAILURE "+t.getMessage() + " " + t.getStackTrace().toString());
             }
         });
+    }
+
+    private List<Comic> generateListWithComicRare(List<Comic> comics){
+        int quantRare = (int) (comics.size() * 0.12f);
+        int contRare = 0;
+        for(Comic comic : comics){
+            boolean isRare = new Random().nextInt() % 2 == 0;
+            if(contRare < quantRare && isRare){
+                contRare++;
+                comic.setRare(isRare);
+            }else {
+                comic.setRare(false);
+            }
+        }
+
+        return comics;
     }
 
     private void loadingComic (List<Comic> comicList){
