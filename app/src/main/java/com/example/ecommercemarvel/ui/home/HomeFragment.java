@@ -5,8 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
@@ -25,15 +22,17 @@ import retrofit2.Response;
 
 import com.example.ecommercemarvel.R;
 import com.example.ecommercemarvel.adapter.ComicAdapter;
+import com.example.ecommercemarvel.dagger.MyApplication;
 import com.example.ecommercemarvel.model.Comic;
 import com.example.ecommercemarvel.model.ResponseComic;
 import com.example.ecommercemarvel.service.MarvelService;
-import com.example.ecommercemarvel.service.RetrofitMarvel;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Callable;
+
+import javax.inject.Inject;
 
 public class HomeFragment extends Fragment {
 
@@ -41,18 +40,20 @@ public class HomeFragment extends Fragment {
     private ComicAdapter comicAdapter;
     private final CompositeDisposable disposables = new CompositeDisposable();
     private List<Comic> comics = new ArrayList<>();
-    private MarvelService marvelService;
+
     private int limit = 10;
+
+    @Inject
+    public MarvelService marvelService;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
+        MyApplication.applicationComponent.inject(this);
+
         recyclerView = root.findViewById(R.id.recyclerComics);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-
-        RetrofitMarvel retrofitMarvel = new RetrofitMarvel();
-        marvelService = retrofitMarvel.getMarvelService();
 
         comicAdapter = new ComicAdapter(comics, getContext());
         recyclerView.setAdapter(comicAdapter);
