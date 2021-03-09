@@ -42,6 +42,7 @@ public class HomeFragment extends Fragment {
     private final CompositeDisposable disposables = new CompositeDisposable();
     private List<Comic> comics = new ArrayList<>();
     private MarvelService marvelService;
+    private int limit = 10;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -78,7 +79,9 @@ public class HomeFragment extends Fragment {
         return root;
     }
 
-    private void getComics(int limit){
+    private void getComics(int newLimit){
+
+        limit += newLimit;
 
         marvelService.getComics(limit).enqueue(new Callback<ResponseComic>() {
             @Override

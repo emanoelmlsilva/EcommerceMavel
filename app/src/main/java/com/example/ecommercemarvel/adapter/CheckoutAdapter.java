@@ -42,6 +42,7 @@ public class CheckoutAdapter extends RecyclerView.Adapter<CheckoutAdapter.MyView
         holder.getTxtPrice().setText("$"+comicDAOEntity.getPrice());
         holder.getTxtAmount().setText("Qt: "+comicDAOEntity.getAmount());
         String url = comicDAOEntity.getImageUrl();
+
         if(comicDAOEntity.getRare()){
             holder.imgRare.setVisibility(View.VISIBLE);
         }
