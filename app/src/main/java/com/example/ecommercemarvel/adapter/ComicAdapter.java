@@ -13,6 +13,7 @@ import com.example.ecommercemarvel.model.Comic;
 import com.example.ecommercemarvel.ui.detail.DetailFragment;
 
 import java.util.List;
+import java.util.Optional;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -45,6 +46,8 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
         String url = comic.getThumbnail().getPath() + "." + comic.getThumbnail().getExtension();
         if(comic.getRare()){
             holder.imgRare.setVisibility(View.VISIBLE);
+        }else{
+            holder.imgRare.setVisibility(View.GONE);
         }
         Glide.with(holder.getView())
                 .load(url)
@@ -62,7 +65,14 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
     }
 
     public void updateList(List<Comic> comics){
-        this.comics.addAll(comics);
+        this.comics = null;
+        this.comics = comics;
+//        for(Comic comic : comics){
+//            Optional<Comic> checkComicExists = this.comics.stream().filter(item -> item.getId() == comic.getId()).findAny();
+//            if(!checkComicExists.isPresent()){
+//                this.comics.add(comic);
+//            }
+//        }
         notifyDataSetChanged();
     }
 
