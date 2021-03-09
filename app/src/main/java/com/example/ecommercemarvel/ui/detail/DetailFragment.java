@@ -91,8 +91,8 @@ public class DetailFragment extends Fragment {
             ComicDAOEntity comicDAOEntity = dataBase.getComicById(comic.getId());
             if(comicDAOEntity != null){
                 comicDAOEntity.setAmount(comicDAOEntity.getAmount() + Integer.parseInt(spinner.getSelectedItem().toString()));
+                dataBase.updateComic(comicDAOEntity);
             }else{
-
                 String url = comic.getThumbnail().getPath() + "." + comic.getThumbnail().getExtension();
 
                 comicDAOEntity = new ComicDAOEntity();
