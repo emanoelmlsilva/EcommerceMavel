@@ -1,22 +1,31 @@
-package com.example.ecommercemarvel.service;
+package com.example.ecommercemarvel.dagger;
 
+import com.example.ecommercemarvel.service.MarvelService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import javax.inject.Singleton;
+
+import dagger.Module;
+import dagger.Provides;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitMarvel {
-
+@Module
+public class NetworkModule {
     private String API_KEY = "59f264a61d8968c09fc445e1f41052b7";
-    private Retrofit retrofit;
-    private MarvelService marvelService;
 
-    public RetrofitMarvel(){
+    @Provides
+    public Gson provideGson(){
         Gson gson = new GsonBuilder().create();
+        return gson;
+    }
+
+    @Provides
+    public OkHttpClient provideOkHttpClient(){
 
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(chain -> {
 
@@ -31,17 +40,20 @@ public class RetrofitMarvel {
             return chain.proceed(request.newBuilder().url(httpUrl).build());
 
         }).build();
-
-        retrofit = new Retrofit.Builder().baseUrl("https://gateway.marvel.com/v1/public/").addConverterFactory(GsonConverterFactory.create(gson)).client(client).build();
-
-        marvelService = retrofit.create(MarvelService.class);
+        return client;
     }
 
-    public Retrofit getRetrofit(){
-        return this.retrofit;
+    @Singleton
+    @Provides
+    public Retrofit provideRetrofit(OkHttpClient client, Gson gson){
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://gateway.marvel.com/v1/public/").addConverterFactory(GsonConverterFactory.create(gson)).client(client).build();
+        return retrofit;
     }
 
-    public MarvelService getMarvelService(){
-        return marvelService;
+    @Singleton
+    @Provides
+    public MarvelService provideMarvelService(Retrofit retrofit){
+        return retrofit.create(MarvelService.class);
     }
 }
