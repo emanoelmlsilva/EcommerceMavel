@@ -137,11 +137,11 @@ public class HomeFragment extends Fragment {
                 }));
     }
 
-    private Observable<List<Comic>> obserbable(List<Comic> comics){
+    private Observable<List<Comic>> obserbable(List<Comic> comicList){
         return Observable.defer(new Callable<ObservableSource<? extends List<Comic>>>() {
             @Override
             public ObservableSource<? extends List<Comic>> call() throws Exception {
-                return Observable.just(comics);
+                return Observable.just(comicList);
             }
         });
     }
