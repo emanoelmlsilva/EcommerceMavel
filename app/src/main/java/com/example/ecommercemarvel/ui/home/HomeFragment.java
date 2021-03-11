@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
@@ -22,7 +24,9 @@ import retrofit2.Response;
 
 import com.example.ecommercemarvel.R;
 import com.example.ecommercemarvel.adapter.ComicAdapter;
+import com.example.ecommercemarvel.dagger.DaggerApplicationComponent;
 import com.example.ecommercemarvel.dagger.MyApplication;
+import com.example.ecommercemarvel.dagger.NetworkModule;
 import com.example.ecommercemarvel.model.Comic;
 import com.example.ecommercemarvel.model.ResponseComic;
 import com.example.ecommercemarvel.service.MarvelService;
@@ -38,7 +42,6 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ComicAdapter comicAdapter;
-    private final CompositeDisposable disposables = new CompositeDisposable();
     private List<Comic> comics = new ArrayList<>();
 
     private int limit = 10;
@@ -84,16 +87,22 @@ public class HomeFragment extends Fragment {
 
         limit += newLimit;
 
-        marvelService.getComics(limit).enqueue(new Callback<ResponseComic>() {
+        marvelService.getComics(limit).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<ResponseComic>() {
+
             @Override
-            public void onResponse(Call<ResponseComic> call, Response<ResponseComic> response) {
-                List<Comic> generatedNewList = generateListWithComicRare(response.body().getData().getResults());
-                loadingComic(generatedNewList);
+            public void onNext(@io.reactivex.annotations.NonNull ResponseComic responseComic) {
+                List<Comic> generatedNewList = generateListWithComicRare(responseComic.getData().getResults());
+                comicAdapter.updateList(generatedNewList);
             }
 
             @Override
-            public void onFailure(Call<ResponseComic> call, Throwable t) {
-                System.out.println("FAILURE "+t.getMessage() + " " + t.getStackTrace().toString());
+            public void onError(@io.reactivex.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
             }
         });
     }
@@ -114,35 +123,4 @@ public class HomeFragment extends Fragment {
         return comics;
     }
 
-    private void loadingComic (List<Comic> comicList){
-        disposables.add(obserbable(comicList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<List<Comic>>() {
-                    @Override
-                    public void onComplete() {
-                        Log.d("TAG", " onComplete");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d("TAG", " onError : " + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(List<Comic> results) {
-                        Log.d("TAG", " onError : " + results.size());
-                        comicAdapter.updateList(results);
-                    }
-                }));
-    }
-
-    private Observable<List<Comic>> obserbable(List<Comic> comicList){
-        return Observable.defer(new Callable<ObservableSource<? extends List<Comic>>>() {
-            @Override
-            public ObservableSource<? extends List<Comic>> call() throws Exception {
-                return Observable.just(comicList);
-            }
-        });
-    }
 }
