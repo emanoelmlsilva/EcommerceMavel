@@ -67,12 +67,6 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.MyViewHolder
     public void updateList(List<Comic> comics){
         this.comics = null;
         this.comics = comics;
-//        for(Comic comic : comics){
-//            Optional<Comic> checkComicExists = this.comics.stream().filter(item -> item.getId() == comic.getId()).findAny();
-//            if(!checkComicExists.isPresent()){
-//                this.comics.add(comic);
-//            }
-//        }
         notifyDataSetChanged();
     }
 
